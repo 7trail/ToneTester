@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="WordnetAdjectives.csv" />
+    <None Remove="WordnetSynonymsEdit.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WordnetAdjectives.csv" />
+    <EmbeddedResource Include="WordnetSynonymsEdit.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="1.7.0" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="1.7.0" />
+    <PackageReference Include="Microsoft.ML.LightGbm" Version="1.7.0" />
+  </ItemGroup>
+  <ItemGroup Label="Dataset">
+    <None Include="Dataset.consumption.cs">
+      <DependentUpon>Dataset.mbconfig</DependentUpon>
+    </None>
+    <None Include="Dataset.training.cs">
+      <DependentUpon>Dataset.mbconfig</DependentUpon>
+    </None>
+    <None Include="Dataset.zip">
+      <DependentUpon>Dataset.mbconfig</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup Label="DatasetLightweight">
+    <None Include="DatasetLightweight.consumption.cs">
+      <DependentUpon>DatasetLightweight.mbconfig</DependentUpon>
+    </None>
+    <None Include="DatasetLightweight.training.cs">
+      <DependentUpon>DatasetLightweight.mbconfig</DependentUpon>
+    </None>
+    <None Include="DatasetLightweight.zip">
+      <DependentUpon>DatasetLightweight.mbconfig</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
