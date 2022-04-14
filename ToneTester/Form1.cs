@@ -62,13 +62,17 @@ namespace ToneTester
         public string GetSynonym(string word)
         {
 
-            int r = rnd.Next(dict.Count);
 
-            if (dict.ContainsKey(word))
+            if (word != null)
             {
-                return dict[word][r];
+                if (dict.ContainsKey(word))
+                {
+                    int r = rnd.Next(dict[word].Count);
+                    return dict[word][r];
+                }
+                return word;
             }
-            return word;
+            return "";
         }
 
         string[] ReadAllResourceLines(string resourceName)
@@ -92,25 +96,41 @@ namespace ToneTester
                 yield return line;
             }
         }
-
+        public List<string> bannedWords = new List<string>() { "i", "am","was","is", "you", "we", "us", "the", "a", "an", "and","but","so","for","yet","because" };
         public string RegenerateSentence(string sentence, int wordCount=3)
         {
             string[] words = sentence.Split(' ');
             for (int i = 0; i < wordCount; i++) {
                 int r = rnd.Next(words.Length);
-                words[r] = GetSynonym(words[r]);
+                if (!bannedWords.Contains(words[r]))
+                {
+                    //bool plural = words[r].IsPlural();
+                    string syn = GetSynonym(words[r]);
+                    if (syn.Length >= 3 && words[r].Length >= 3 && syn.Substring(0, 3) != words[r].Substring(0, 3)) {
+                        words[r] = syn;
+                    }
+                    //if (plural) { words[r] += words[r].Pluralize(); }
+                }
             }
 
-
-            return sentence;
+            string s = "";
+            foreach(string w in words)
+            {
+                s += w + " ";
+            }
+            return s;
         }
-        public string GetMostProminent(string input)
+        public struct SentenceData
+        {
+            public string type;
+            public float confidence;
+        }
+        public SentenceData GetMostProminent(string input)
         {
             string str = "";
-
+            SentenceData data = new SentenceData();
             dynamic sampleData = null;
             dynamic result = null;
-
             if (checkBox1.Checked)
             {
                 sampleData = new DatasetLightweight.ModelInput()
@@ -130,9 +150,10 @@ namespace ToneTester
 
             if (result != null)
             {
-                return result.PredictedLabel;
+                data.type = result.PredictedLabel;
+                data.confidence = result.Score[1];
             }
-            return "None";
+            return data;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -142,7 +163,8 @@ namespace ToneTester
 
         private void button1_Click(object sender, EventArgs e)
         {
-            label1.Text = GetMostProminent(textBox1.Text).FirstCharToUpper();
+            label1.Text = GetMostProminent(textBox1.Text.ToLower()).type.FirstCharToUpper();
+            //progressBar1.Value = (int)(GetMostProminent(textBox1.Text).confidence*100);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -152,7 +174,22 @@ namespace ToneTester
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            string startSentence = textBox1.Text.ToLower();
+            string mood = GetMostProminent(textBox1.Text.ToLower()).type;
+            string currentSentence = startSentence;
+            float bestConfidence = 0;
+            for (int i = 0; i < 100; i++)
+            {
+                string newSentence = RegenerateSentence(startSentence);
+                SentenceData data = GetMostProminent(newSentence);
+                if (data.type == mood && data.confidence > bestConfidence)
+                {
+                    bestConfidence = data.confidence;
+                    currentSentence = newSentence;
+                }
+            }
+            Clipboard.SetText(currentSentence);
+            label2.Text = currentSentence;
         }
     }
 }

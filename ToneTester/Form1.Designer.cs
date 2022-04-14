@@ -34,6 +34,8 @@ namespace ToneTester
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -49,9 +51,9 @@ namespace ToneTester
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(335, 248);
+            this.textBox1.Location = new System.Drawing.Point(282, 273);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 23);
+            this.textBox1.Size = new System.Drawing.Size(200, 23);
             this.textBox1.TabIndex = 1;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -59,7 +61,7 @@ namespace ToneTester
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(308, 37);
+            this.label1.Location = new System.Drawing.Point(304, 37);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(162, 51);
             this.label1.TabIndex = 2;
@@ -68,7 +70,7 @@ namespace ToneTester
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(201, 250);
+            this.checkBox1.Location = new System.Drawing.Point(318, 120);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(128, 19);
             this.checkBox1.TabIndex = 3;
@@ -86,11 +88,30 @@ namespace ToneTester
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(282, 91);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(205, 23);
+            this.progressBar1.TabIndex = 5;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(327, 255);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(109, 15);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Improved Sentence";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(784, 411);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label1);
@@ -111,6 +132,8 @@ namespace ToneTester
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label label2;
     }
 }
 
