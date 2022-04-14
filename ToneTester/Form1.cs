@@ -178,18 +178,27 @@ namespace ToneTester
             string mood = GetMostProminent(textBox1.Text.ToLower()).type;
             string currentSentence = startSentence;
             float bestConfidence = 0;
+            Dictionary<string, float> newSentences = new Dictionary<string, float>();
             for (int i = 0; i < 100; i++)
             {
                 string newSentence = RegenerateSentence(startSentence);
                 SentenceData data = GetMostProminent(newSentence);
-                if (data.type == mood && data.confidence > bestConfidence)
+                /*if (data.type == mood && data.confidence > bestConfidence)
                 {
                     bestConfidence = data.confidence;
                     currentSentence = newSentence;
-                }
+                }*/
+                newSentences[newSentence] = data.confidence;
+
             }
-            Clipboard.SetText(currentSentence);
-            label2.Text = currentSentence;
+            var thing = newSentences.OrderByDescending(key => key.Value);
+            label2.Text = thing.ElementAt(0).Key;
+            label3.Text = thing.ElementAt(1).Key;
+            label4.Text = thing.ElementAt(2).Key;
+
+
+            //Clipboard.SetText(currentSentence);
+            //label2.Text = currentSentence;
         }
     }
 }
