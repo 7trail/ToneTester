@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -220,6 +221,7 @@ namespace ToneTester
         {
             public string type;
             public float confidence;
+            public float[] score;
         }
         public SentenceData GetMostProminent(string input, bool loadPieValues = false)
         {
@@ -249,6 +251,7 @@ namespace ToneTester
             {
                 data.type = result.PredictedLabel;
                 data.confidence = result.Score[1];
+                data.score = result.Score;
             }
 
             if (loadPieValues && result != null)
@@ -280,8 +283,11 @@ namespace ToneTester
         private void button1_Click(object sender, EventArgs e)
         {
             label1.Text = "Mood: " + GetMostProminent(textBox1.Text.ToLower(),true).type.FirstCharToUpper();
-            richTextBox1.Text = textBox1.Text.ToLower();
+            richTextBox1.Text = textBox1.Text.ToLower().CapitalizeFirst();
             SetBoxText(richTextBox1);
+            richTextBox2.Text = "Improved Sentence";
+            richTextBox3.Text = "Improved Sentence";
+            richTextBox4.Text = "Improved Sentence";
             //progressBar1.Value = (int)(GetMostProminent(textBox1.Text).confidence*100);
         }
 
@@ -328,7 +334,7 @@ namespace ToneTester
                         bestConfidence = data.confidence;
                         currentSentence = newSentence;
                     }*/
-                    newSentences[newSentence] = data.confidence;
+                    if (data.type == mood.ToLower()) { newSentences[newSentence] = data.confidence; }
                     if (i % 5 == 0)
                     {
                         label2.Text = "Generating sentence variants: " + (i + 1) + "%";
@@ -338,22 +344,32 @@ namespace ToneTester
                 label2.Text = "Creating Rich Text: 0%";
                 this.Refresh();
                 var thing = newSentences.OrderByDescending(key => key.Value);
-                richTextBox2.Text = thing.ElementAt(0).Key;
-                SetBoxText(richTextBox2);
-                label2.Text = "Creating Rich Text: 33%";
-                this.Refresh();
-                if (thing.Count() > 1)
+                if (thing.Count() > 0)
                 {
-                    richTextBox3.Text = thing.ElementAt(1).Key;
-                    SetBoxText(richTextBox3);
-                }
-                label2.Text = "Creating Rich Text: 66%";
-                this.Refresh();
-                if (thing.Count() > 2)
+                    richTextBox2.Text = thing.ElementAt(0).Key.CapitalizeFirst();
+                    SetBoxText(richTextBox2);
+                    label2.Text = "Creating Rich Text: 33%";
+                    this.Refresh();
+
+                    if (thing.Count() > 1)
+                    {
+                        richTextBox3.Text = thing.ElementAt(1).Key.CapitalizeFirst();
+                        SetBoxText(richTextBox3);
+                    }
+                    label2.Text = "Creating Rich Text: 66%";
+                    this.Refresh();
+                    if (thing.Count() > 2)
+                    {
+                        richTextBox4.Text = thing.ElementAt(2).Key.CapitalizeFirst();
+                        SetBoxText(richTextBox4);
+                    }
+                } else
                 {
-                    richTextBox4.Text = thing.ElementAt(2).Key;
-                    SetBoxText(richTextBox4);
+                    richTextBox2.Text = "Improved Sentence";
+                    richTextBox3.Text = "Improved Sentence";
+                    richTextBox4.Text = "Improved Sentence";
                 }
+                
                 label2.Text = "Done!";
                 this.Refresh();
 
@@ -389,6 +405,32 @@ namespace ToneTester
                 MessageBox.Show("Copied improved text to clipboard!");
             }
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Mood Engine 1.0");
+        }
+        TrimForm trim = new TrimForm();
+        private void trimDatasetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TrimForm.form = this;
+            trim.Show();
+        }
     }
 }
 public static class StringExtensions
@@ -399,4 +441,43 @@ public static class StringExtensions
             "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
             _ => string.Concat(input[0].ToString().ToUpper(), input.AsSpan(1))
         };
+    public static string CapitalizeFirst(this string s)
+    {
+        bool IsNewSentense = true;
+        var result = new StringBuilder(s.Length);
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (IsNewSentense && char.IsLetter(s[i]))
+            {
+                result.Append(char.ToUpper(s[i]));
+                IsNewSentense = false;
+            }
+            else
+                result.Append(s[i]);
+
+            if (s[i] == '!' || s[i] == '?' || s[i] == '.')
+            {
+                IsNewSentense = true;
+            }
+        }
+
+        return result.ToString();
+    }
+}
+
+class OvalPictureBox : PictureBox
+{
+    public OvalPictureBox()
+    {
+        this.BackColor = Color.DarkGray;
+    }
+    protected override void OnResize(EventArgs e)
+    {
+        base.OnResize(e);
+        using (var gp = new GraphicsPath())
+        {
+            gp.AddEllipse(new Rectangle(0, 0, this.Width - 1, this.Height - 1));
+            this.Region = new Region(gp);
+        }
+    }
 }
