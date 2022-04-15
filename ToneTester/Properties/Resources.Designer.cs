@@ -61,6 +61,21 @@ namespace ToneTester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;s gravenhage,The Hague,&apos;s Gravenhage,Den Haag,city (generic term),metropolis (generic term),urban center (generic term,
+        ///&apos;tween decks,between decks,,,,,,
+        ///0.22,twenty-two,firearm (generic term),piece (generic term),small-arm (generic term),,,
+        ///.22-calibre,.22 caliber,.22-caliber,.22 calibre,diameter,diam (related term),,
+        ///.22 caliber,.22-caliber,.22 calibre,.22-calibre,diameter,diam (related term),,
+        ///.22 calibre,.22 caliber,.22-caliber,.22-calibre,diameter,diam (related term),,
+        ///.38-caliber,.38 caliber,.38 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string NewResource {
+            get {
+                return ResourceManager.GetString("NewResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Word,Synonyms
         ///a-ok,a-okay
         ///a-okay,a-ok
