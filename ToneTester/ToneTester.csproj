@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <TargetFramework>net6.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon />
     <StartupObject />
@@ -10,41 +10,12 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="WordnetAdjectives.csv" />
-    <None Remove="WordnetSynonymsEdit.csv" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="WordnetAdjectives.csv" />
-    <EmbeddedResource Include="WordnetSynonymsEdit.csv" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.ML" Version="1.7.0" />
+    <PackageReference Include="Microsoft.ML" Version="4.0.2" />
     <PackageReference Include="Microsoft.ML.FastTree" Version="1.7.0" />
     <PackageReference Include="Microsoft.ML.LightGbm" Version="1.7.0" />
   </ItemGroup>
-  <ItemGroup Label="Dataset">
-    <None Include="Dataset.consumption.cs">
-      <DependentUpon>Dataset.mbconfig</DependentUpon>
-    </None>
-    <None Include="Dataset.training.cs">
-      <DependentUpon>Dataset.mbconfig</DependentUpon>
-    </None>
-    <None Include="Dataset.zip">
-      <DependentUpon>Dataset.mbconfig</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup Label="DatasetLightweight">
-    <None Include="DatasetLightweight.consumption.cs">
-      <DependentUpon>DatasetLightweight.mbconfig</DependentUpon>
-    </None>
-    <None Include="DatasetLightweight.training.cs">
-      <DependentUpon>DatasetLightweight.mbconfig</DependentUpon>
-    </None>
-    <None Include="DatasetLightweight.zip">
-      <DependentUpon>DatasetLightweight.mbconfig</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+  <ItemGroup>
+    <ProjectReference Include="..\ToneTester-AI\ToneTester_AI.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
